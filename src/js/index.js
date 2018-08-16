@@ -1,8 +1,9 @@
-// Global app controller c9c26210542eb8875fa210331e3090f9 http://food2fork.com/api/search
+// Global app controller 
 import Search from './models/search';
 import Recipe from './models/Recipe';
 import * as searchView from './views/searchView';
 import { elements, renderLoader, clearLoader } from './views/base';
+
 /* Global state of the app
 - search object
 -current recipe object
@@ -17,7 +18,6 @@ const state = {};
 const controlSearch = async() => {
     //1. get query from view
     const query = searchView.getInput(); //todo
-
     if (query) {
         //2.new search object and add to state
         state.search = new Search(query);
@@ -49,6 +49,13 @@ elements.searchForm.addEventListener('submit', e => {
     controlSearch();
 
 });
+//testing
+// window.addEventListener('load', e => {
+
+//     e.preventDefault();
+//     controlSearch();
+
+// });
 
 elements.searchResPages.addEventListener('click', e => {
     const btn = e.target.closest('.btn-inline');
@@ -75,8 +82,10 @@ const controlRecipe = async() => {
         // create new recipe object
         state.recipe = new Recipe(id);
         try {
-            // get recipe data
+            // get recipe data and parse ingredients
             await state.recipe.getRecipe();
+            state.recipe.parseIngredients();
+
             // calculate serving time
             state.recipe.calcTime();
             state.recipe.calcServings();
